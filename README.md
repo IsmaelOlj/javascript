@@ -16,3 +16,5 @@ My javascript proyects, made to add features to websites created on wordpress ma
 1-Schedule editor
 
 This code filters options shown to a customer in an appointment reservation system. The wordpress plugin use as a base for this feature did not allow to set different schedules for the different days of the week, this javascript proyect addresses that. 
+
+Made for the website alejandrodietista.com, which was created by me and I currently manage, and add features requested by the client.
