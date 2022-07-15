@@ -6,10 +6,36 @@ var contadorCambios;
 var options;
 var desactivados = [];
 var flipflop = 0;
+var dia2;
+
+	
+
+var horaslunespm = ["5:00 pm","7:00 pm","8:00 pm"];
+var horaslunes24 = ["17:00","19:00","20:00"];
+var valoreslunes = [1020,1140,1200];
+	
+var horasmartespm = ["4:00 pm", "6:00 pm"];
+var horasmartes24 = ["16:00","18:00"];
+var valoresmartes
+	
+var horasmiercolespm = ["10:00 am", "11:00 am", "1:00 pm"];
+var horasmiercoles24 = ["10:00","11:00","13:00"];
+var valoresmiercoles
+	
+var horasjuevespm = ["5:00 pm","6:00 pm"];
+var horasjueves24 = ["17:00","18:00"];
+var valoresjueves
+	
+var horasSemana = [horaslunes24,horasmartes24,horasmiercoles24,horasjueves24];
+var aDesactivar = [];
+	
+var chosen;
+var pastchosen;
+	
 var intervalId = window.setInterval(actualizador, 500);
-	/*
+	
 var intervalId2 = window.setInterval(guardaInfo, 20);
-*/
+
 }
 
 if(document.body.classList.contains("post-in-category-blo-g")){
@@ -17,19 +43,53 @@ if(document.body.classList.contains("post-in-category-blo-g")){
 }
 
 function guardaInfo(){
-	var wrap = document.getElementsByClassName("mvvwb_wrap")[0];
-	if(wrap.classList.contains("mvvwb_loading")){
-		console.log("xD")
-		flipflop = 1;
-	}
-	if (!wrap.classList.contains("mvvwb_loading") && flipflop == 1){
-			setTimeout(function () {		flipflop = 0;
-		desactivados = getDisabled();
-		console.log(desactivados);     
-    }, 20);
-
-	}
+	chosen = document.getElementsByClassName("flatpickr-day selected")[0];
 	
+	if(!chosen.isSameNode(pastchosen))
+		{
+			aDesactivar = [];
+		}
+
+	pastchosen = chosen;
+		
+	switch (dia2){
+		case "lunes": 	
+			var disabled = getDisabled();
+			for (i=0;i<disabled.length;i++){
+				if(horasSemana[0].includes(disabled[i])){
+				   console.log("hay un dia que deberia desactivarse");
+				   }
+			}			
+			break;
+		case "martes":
+			var disabled = getDisabled();
+			for (i=0;i<disabled.length;i++){
+				if(horasSemana[1].includes(disabled[i])){
+				   aDesactivar[i]=disabled[i]		
+				   }			
+				}				
+			break;
+		case "miercoles":
+			var disabled = getDisabled();
+			for (i=0;i<disabled.length;i++){
+				if(horasSemana[2].includes(disabled[i])){
+				   aDesactivar[i]=disabled[i]		
+				   }			
+				}			
+			break;
+			
+		case "jueves":
+			var disabled = getDisabled();
+			for (i=0;i<disabled.length;i++){
+				if(horasSemana[3].includes(disabled[i])){
+				   aDesactivar[i]=disabled[i]		
+				   }			
+				}							
+			break;			
+		default:
+			break;		
+	
+	}
 }
 
 function preparacionPagina(){
@@ -67,21 +127,6 @@ function actualizador(){
 	var indice = hijos.indexOf(elegido);
 	var dia = indice % 7;
 	
-	var horaslunespm = ["5:00 pm","7:00 pm","8:00 pm"];
-	var horaslunes24 = ["17:00","19:00","20:00"];
-	var valoreslunes = [1020,1140,1200];
-	
-	var horasmartespm = ["4:00 pm", "6:00 pm"];
-	var horasmartes24 = ["16:00","18:00"];
-	var valoresmartes
-	
-	var horasmiercolespm = ["10:00 am", "11:00 am", "1:00 pm"];
-	var horasmiercoles24 = ["10:00","11:00","13:00"];
-	var valoresmiercoles
-	
-	var horasjuevespm = ["5:00 pm","6:00 pm"];
-	var horasjueves24 = ["17:00","18:00"];
-	var valoresjueves
 	
 	var disabled
 	
@@ -91,12 +136,14 @@ function actualizador(){
 			var select = creaOpciones(horaslunes24);
 			var disabled = getDisabled();			
 			contenedor(horaslunespm,horaslunes24);
+			dia2 = "lunes";
 			
 			break;
 		case 1:
 			var select = creaOpciones(horasmartes24);
 			var disabled = getDisabled();						
 			contenedor(horasmartespm,horasmartes24);			
+			dia2 = "martes";
 			
 			break;
 		case 2:
@@ -104,6 +151,7 @@ function actualizador(){
 			var select = creaOpciones(horasmiercoles24);
 			var disabled = getDisabled();									
 			contenedor(horasmiercolespm,horasmiercoles24);
+			dia2 = "miercoles";
 			
 			break;
 		case 3:
@@ -111,8 +159,9 @@ function actualizador(){
 			var select = creaOpciones(horasjueves24);	
 			var disabled = getDisabled();
 			contenedor(horasjuevespm,horasjueves24);
+			dia2 = "jueves";
 			break;
-			
+
 		default:
 			break;						
 	}
@@ -132,8 +181,9 @@ function creaOpciones(horas24){
 					}
 				else{
 					hijos[i].hidden = false;
-
-					hijos[i].disabled = false;
+					if (!aDesactivar.includes(hijos[i].innerText)){
+						hijos[i].disabled = false;
+					}
 					
 
 					}
@@ -150,7 +200,7 @@ function getDisabled(){
 	
 	for (i=0;i<hijos.length;i++){
 		if (hijos[i].disabled){
-			disabled[i] = hijos[i].value;
+			disabled[i] = hijos[i].innerText;
 		}
 		else{
 			disabled[i] = -1;
