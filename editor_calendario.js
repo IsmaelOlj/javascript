@@ -16,21 +16,21 @@ var valoreslunes = [1020,1140,1200];
 	
 var horasmartespm = ["4:00 pm", "6:00 pm"];
 var horasmartes24 = ["16:00","18:00"];
-var valoresmartes
+var valoresmartes = [960,1080];
 	
 var horasmiercolespm = ["10:00 am", "11:00 am", "1:00 pm"];
 var horasmiercoles24 = ["10:00","11:00","13:00"];
-var valoresmiercoles
+var valoresmiercoles = [600,660,780]
 	
 var horasjuevespm = ["5:00 pm","6:00 pm"];
 var horasjueves24 = ["17:00","18:00"];
-var valoresjueves
+var valoresjueves = [1020,1080]
 	
 var horasSemana = [horaslunes24,horasmartes24,horasmiercoles24,horasjueves24];
 var aDesactivar = [];
 	
 var chosen;
-var pastchosen;
+var pastchosen = document.createElement("h2");
 	
 var intervalId = window.setInterval(actualizador, 500);
 	
@@ -57,7 +57,7 @@ function guardaInfo(){
 			var disabled = getDisabled();
 			for (i=0;i<disabled.length;i++){
 				if(horasSemana[0].includes(disabled[i])){
-				   console.log("hay un dia que deberia desactivarse");
+				   aDesactivar[i]=disabled[i]	
 				   }
 			}			
 			break;
@@ -133,14 +133,14 @@ function actualizador(){
 	
 	switch (dia){
 		case 0: 			
-			var select = creaOpciones(horaslunes24);
+			var select = creaOpciones(horaslunes24,valoreslunes);
 			var disabled = getDisabled();			
 			contenedor(horaslunespm,horaslunes24);
 			dia2 = "lunes";
 			
 			break;
 		case 1:
-			var select = creaOpciones(horasmartes24);
+			var select = creaOpciones(horasmartes24,valoresmartes);
 			var disabled = getDisabled();						
 			contenedor(horasmartespm,horasmartes24);			
 			dia2 = "martes";
@@ -148,7 +148,7 @@ function actualizador(){
 			break;
 		case 2:
 						
-			var select = creaOpciones(horasmiercoles24);
+			var select = creaOpciones(horasmiercoles24,valoresmiercoles);
 			var disabled = getDisabled();									
 			contenedor(horasmiercolespm,horasmiercoles24);
 			dia2 = "miercoles";
@@ -156,7 +156,7 @@ function actualizador(){
 			break;
 		case 3:
 			
-			var select = creaOpciones(horasjueves24);	
+			var select = creaOpciones(horasjueves24,valoresjueves);	
 			var disabled = getDisabled();
 			contenedor(horasjuevespm,horasjueves24);
 			dia2 = "jueves";
@@ -168,7 +168,7 @@ function actualizador(){
 	
 }
 
-function creaOpciones(horas24){
+function creaOpciones(horas24,valores){
 	
 			var select = document.getElementsByName("mvvwb_timeStart")[0];
 			var hijos = Array.from(select.children);
@@ -178,9 +178,11 @@ function creaOpciones(horas24){
 				if (!horas24.includes(hijos[i].innerText)) {
 					hijos[i].hidden = true;
 					hijos[i].disabled = true;
+					hijos[i].value = -1;
 					}
 				else{
 					hijos[i].hidden = false;
+					hijos[i].value = valores[horas24.indexOf(hijos[i].innerText)]
 					if (!aDesactivar.includes(hijos[i].innerText)){
 						hijos[i].disabled = false;
 					}
